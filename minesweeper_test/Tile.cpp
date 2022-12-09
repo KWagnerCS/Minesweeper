@@ -34,13 +34,37 @@ void Tile::setNeighbors(std::array<Tile *, 8> _neighbors) {
 void Tile::onClickLeft() {
     Toolbox* tools = Toolbox::getInstance();
     if(tools->gameState->getPlayStatus() == GameState::PLAYING){
-        if (state == HIDDEN){
+        if (getState() == HIDDEN){
             if (typeOfTile == -1){
-                state = EXPLODED;
+                setState(EXPLODED);
                 tools->gameState->setPlayStatus(GameState::LOSS);
             }
             else if (typeOfTile >= 0){
-                state = REVEALED;
+                setState(REVEALED);
+                if (typeOfTile == 0){
+                    revealNeighbors();
+                }
+
+                int hiddenTileCount = 0;
+                for(int y = 0; y < tools->gameState->mapDimensions.y; y++) {
+                    for (int x = 0; x < tools->gameState->mapDimensions.x; x++) {
+                        if(tools->gameState->mapData[y][x]->getState() == HIDDEN){
+                            hiddenTileCount++;
+                        }
+                    }
+                }
+                if (hiddenTileCount == tools->gameState->getMineCount()){
+                    tools->gameState->setPlayStatus(GameState::WIN);
+                    for(int y = 0; y < tools->gameState->mapDimensions.y; y++) {
+                        for (int x = 0; x < tools->gameState->mapDimensions.x; x++) {
+                            if(tools->gameState->mapData[y][x]->getState() == HIDDEN){
+                                tools->gameState->mapData[y][x]->setState(FLAGGED);
+                            }
+                        }
+                    }
+                }
+
+
             }
         }
     }
@@ -49,12 +73,12 @@ void Tile::onClickLeft() {
 void Tile::onClickRight() {
     Toolbox* tools = Toolbox::getInstance();
     if(tools->gameState->getPlayStatus() == GameState::PLAYING){
-        if (state == FLAGGED){
-            state = HIDDEN;
+        if (getState() == FLAGGED){
+            setState(HIDDEN);
             tools->gameState->numberOfFlags--;
         }
-        else if (state == HIDDEN){
-            state = FLAGGED;
+        else if (getState() == HIDDEN){
+            setState(FLAGGED);
             tools->gameState->numberOfFlags++;
         }
     }
@@ -63,10 +87,10 @@ void Tile::onClickRight() {
 void Tile::draw() {
     Toolbox* tools = Toolbox::getInstance();
 
-    if(state == HIDDEN){
+    if(getState() == HIDDEN){
         currentTileTexture.loadFromFile("images/tile_hidden.png");
         currentTileSprite.setTexture(currentTileTexture);
-        currentTileSprite.setPosition(sf::Vector2f (tilePosition.x * 32, tilePosition.y * 32));
+        currentTileSprite.setPosition(sf::Vector2f (getLocation().x * 32, getLocation().y * 32));
         tools->window.draw(currentTileSprite);
         if(getDebugMode() && typeOfTile == -1){
             currentTileTexture.loadFromFile("images/mine.png");
@@ -74,10 +98,10 @@ void Tile::draw() {
             tools->window.draw(currentTileSprite);
         }
     }
-    else if(state == REVEALED){
+    else if(getState() == REVEALED){
         currentTileTexture.loadFromFile("images/tile_revealed.png");
         currentTileSprite.setTexture(currentTileTexture);
-        currentTileSprite.setPosition(tilePosition.x * 32, tilePosition.y * 32);
+        currentTileSprite.setPosition(getLocation().x * 32, getLocation().y * 32);
         tools->window.draw(currentTileSprite);
         switch (typeOfTile){
             case 0:
@@ -127,19 +151,19 @@ void Tile::draw() {
         };
 
     }
-    else if(state == EXPLODED){
+    else if(getState() == EXPLODED){
         currentTileTexture.loadFromFile("images/tile_revealed.png");
         currentTileSprite.setTexture(currentTileTexture);
-        currentTileSprite.setPosition(tilePosition.x * 32, tilePosition.y * 32);
+        currentTileSprite.setPosition(getLocation().x * 32, getLocation().y * 32);
         tools->window.draw(currentTileSprite);
         currentTileTexture.loadFromFile("images/mine.png");
         currentTileSprite.setTexture(currentTileTexture);
         tools->window.draw(currentTileSprite);
     }
-    else if(state == FLAGGED){
+    else if(getState() == FLAGGED){
         currentTileTexture.loadFromFile("images/tile_hidden.png");
         currentTileSprite.setTexture(currentTileTexture);
-        currentTileSprite.setPosition(tilePosition.x * 32, tilePosition.y * 32);
+        currentTileSprite.setPosition(getLocation().x * 32, getLocation().y * 32);
         tools->window.draw(currentTileSprite);
         currentTileTexture.loadFromFile("images/flag.png");
         currentTileSprite.setTexture(currentTileTexture);
@@ -148,5 +172,12 @@ void Tile::draw() {
 }
 
 void Tile::revealNeighbors() {
-    // if neighbors type is 0, reveal and draw
+    for(Tile* neighbor : neighbors){
+        if(neighbor != nullptr){
+            if(neighbor->typeOfTile != -1){
+                /// DEBUG
+                neighbor->onClickLeft();
+            }
+        }
+    }
 }

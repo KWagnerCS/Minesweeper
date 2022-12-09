@@ -9,6 +9,7 @@ bool debugMode;
 int launch(){
     Toolbox* tools = Toolbox::getInstance();
     debugMode = false;
+    /// OTHER BUTTONS CREATED IN TOOLBOX INSTANCE
     tools->debugButton = new Button(sf::Vector2f(496,512), toggleDebugMode);
     tools->newGameButton = new Button(sf::Vector2f(368,512), restart);
     gameLoop();
@@ -61,7 +62,7 @@ int gameLoop(){
                         tools->debugButton->onClick();
 
                         /// DEBUG
-                        std::cout << "Loaded test 1" << std::endl;
+                        std::cout << "Debug toggled" << std::endl;
                     }
                 }
 
@@ -85,19 +86,19 @@ int gameLoop(){
                     }
                 }
 
-
-
                 /// ON LOSS
                 if(tools->gameState->getPlayStatus() == GameState::LOSS){
                     std::cout << "YOU LOST";
+                }
+                /// ON WIN
+                if(tools->gameState->getPlayStatus() == GameState::WIN){
+                    std::cout << "YOU WIN";
                 }
 
                 /// CURRENTLY RENDERS AND DISPLAYS ON MOUSE EVENT
                 render();
                 tools->window.display();
             }
-
-
         }
     }
     return 0;
@@ -121,7 +122,7 @@ void render(){
         buttonTexture->loadFromFile("images/face_lose.png");
     }
     else if(tools->gameState->getPlayStatus() == GameState::WIN){
-        buttonTexture->loadFromFile("images/face_happy.png");
+        buttonTexture->loadFromFile("images/face_win.png");
     }
     buttonSprite->setTexture(*buttonTexture);
     tools->newGameButton->setSprite(buttonSprite);

@@ -27,7 +27,56 @@ GameState::GameState(sf::Vector2i dimensions, int _numberOfMines) {
         }
     }
 
-    /// set the numbers
+    /// set the neighbors
+    for(int y = 0; y < dimensions.y; y++){
+        for(int x = 0; x < dimensions.x; x++){
+            std::array<Tile*, 8> _neighbors = {nullptr, nullptr, nullptr, nullptr,
+                                               nullptr, nullptr, nullptr, nullptr};
+            if(x>0 && y>0){
+                _neighbors[0] = mapData[y-1][x-1];
+            }
+            if(y>0){
+                _neighbors[1] = mapData[y-1][x];
+            }
+            if(x<dimensions.x-1 && y>0){
+                _neighbors[2] = mapData[y-1][x+1];
+            }
+            if(x>0){
+                _neighbors[3] = mapData[y][x-1];
+            }
+            if(x<dimensions.x-1){
+                _neighbors[4] = mapData[y][x+1];
+            }
+            if(x>0 && y<dimensions.y-1){
+                _neighbors[5] = mapData[y+1][x-1];
+            }
+            if(y<dimensions.y-1){
+                _neighbors[6] = mapData[y+1][x];
+            }
+            if(x<dimensions.x-1 && y<dimensions.y-1){
+                _neighbors[7] = mapData[y+1][x+1];
+            }
+            mapData[y][x]->setNeighbors(_neighbors);
+        }
+    }
+
+
+    /// set number based on neighbors
+    for(int y = 0; y < dimensions.y; y++){
+        for(int x = 0; x < dimensions.x; x++){
+            int mineCount = 0;
+            for(Tile* neighborTile : mapData[y][x]->getNeighbors()){
+                if(neighborTile != nullptr){
+                    if(neighborTile->typeOfTile == -1){
+                        mineCount++;
+                    }
+                }
+            }
+            if(mapData[y][x]->typeOfTile != -1){
+                mapData[y][x]->typeOfTile = mineCount;
+            }
+        }
+    }
 }
 
 GameState::GameState(const char *filePath) {
@@ -59,7 +108,55 @@ GameState::GameState(const char *filePath) {
     }
     file.close();
 
-    /// set the numbers()
+    /// set the neighbors
+    for(int y = 0; y < mapDimensions.y; y++){
+        for(int x = 0; x < mapDimensions.x; x++){
+            std::array<Tile*, 8> _neighbors = {nullptr, nullptr, nullptr, nullptr,
+                                               nullptr, nullptr, nullptr, nullptr};
+            if(x>0 && y>0){
+                _neighbors[0] = mapData[y-1][x-1];
+            }
+            if(y>0){
+                _neighbors[1] = mapData[y-1][x];
+            }
+            if(x<mapDimensions.x-1 && y>0){
+                _neighbors[2] = mapData[y-1][x+1];
+            }
+            if(x>0){
+                _neighbors[3] = mapData[y][x-1];
+            }
+            if(x<mapDimensions.x-1){
+                _neighbors[4] = mapData[y][x+1];
+            }
+            if(x>0 && y<mapDimensions.y-1){
+                _neighbors[5] = mapData[y+1][x-1];
+            }
+            if(y<mapDimensions.y-1){
+                _neighbors[6] = mapData[y+1][x];
+            }
+            if(x<mapDimensions.x-1 && y<mapDimensions.y-1){
+                _neighbors[7] = mapData[y+1][x+1];
+            }
+            mapData[y][x]->setNeighbors(_neighbors);
+        }
+    }
+
+    /// set number based on neighbors
+    for(int y = 0; y < mapDimensions.y; y++){
+        for(int x = 0; x < mapDimensions.x; x++){
+            int mineCount = 0;
+            for(Tile* neighborTile : mapData[y][x]->getNeighbors()){
+                if(neighborTile != nullptr){
+                    if(neighborTile->typeOfTile == -1){
+                        mineCount++;
+                    }
+                }
+            }
+            if(mapData[y][x]->typeOfTile != -1){
+                mapData[y][x]->typeOfTile = mineCount;
+            }
+        }
+    }
 }
 
 int GameState::getFlagCount() {

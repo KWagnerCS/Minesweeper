@@ -28,13 +28,13 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 9,
+				"line" : 12,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 10,
+				"line" : 13,
 				"parent" : 0
 			}
 		]
@@ -56,7 +56,7 @@
 				{
 					"backtrace" : 2,
 					"isSystem" : true,
-					"path" : "D:/Libraries/SFML-2.5.1/include"
+					"path" : "C:/Libraries-C++/SFML-2.5.1/include"
 				}
 			],
 			"language" : "CXX",
@@ -93,22 +93,22 @@
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "D:\\Libraries\\SFML-2.5.1\\lib\\libsfml-graphics-d.a",
+				"fragment" : "C:\\Libraries-C++\\SFML-2.5.1\\lib\\libsfml-graphics-d.a",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "D:\\Libraries\\SFML-2.5.1\\lib\\libsfml-audio-d.a",
+				"fragment" : "C:\\Libraries-C++\\SFML-2.5.1\\lib\\libsfml-audio-d.a",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "D:\\Libraries\\SFML-2.5.1\\lib\\libsfml-window-d.a",
+				"fragment" : "C:\\Libraries-C++\\SFML-2.5.1\\lib\\libsfml-window-d.a",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "D:\\Libraries\\SFML-2.5.1\\lib\\libsfml-system-d.a",
+				"fragment" : "C:\\Libraries-C++\\SFML-2.5.1\\lib\\libsfml-system-d.a",
 				"role" : "libraries"
 			},
 			{

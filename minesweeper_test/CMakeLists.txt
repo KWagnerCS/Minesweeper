@@ -3,8 +3,9 @@ project(minesweeper_test)
 
 set(CMAKE_CXX_STANDARD 14)
 
-#change to C: on laptop
-set(SFML_DIR "D:/Libraries/SFML-2.5.1/lib/cmake/SFML")
+#change to C:/Libraries-C++ on laptop
+#change to D:/Libraries on desktop
+set(SFML_DIR "C:/Libraries-C++/SFML-2.5.1/lib/cmake/SFML")
 find_package(SFML 2.5.1 COMPONENTS graphics audio REQUIRED)
 
 
